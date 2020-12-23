@@ -5,7 +5,12 @@ import http from 'k6/http';
 export default function (data) {
     let res = http.get('https://api.github.com/users/1');
     check(res, { 
-        'status was 200': (r) => r.status == 200
+        'status was 200': (r) => r.status == 200,
+        'response should have login': (r) => { 
+            const response = r.json();
+            return response && response.login;
+        },
+        'login user equals 1': (r) => r.json().login === "1"
      });
 }
 
